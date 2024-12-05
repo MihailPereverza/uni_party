@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - 'POSTGRES_USER=user'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_DB=uni_party'
+    volumes:
+      - whine-meter-postgres-data:/var/lib/postgresql/data
+    ports:
+      - '25432:5432'
+    healthcheck:
+      test: 'exit 0'
+      start_period: "3s"
+      retries: 1
+    networks:
+      - uni_party_network
+
+  bot:
+    build: .
+    restart: always
+    networks:
+      - uni_party_network
+
+networks:
+  uni_party_network:
+    driver: bridge
+
+volumes:
+  whine-meter-postgres-data:
